@@ -12,32 +12,34 @@
  *
  * @param {string} input
  * @param {string} separator
- */ "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-Object.defineProperty(exports, "splitAtTopLevelOnly", {
-    enumerable: true,
-    get: ()=>splitAtTopLevelOnly
-});
-function splitAtTopLevelOnly(input, separator) {
-    let stack = [];
-    let parts = [];
-    let lastPos = 0;
-    for(let idx = 0; idx < input.length; idx++){
-        let char = input[idx];
-        if (stack.length === 0 && char === separator[0]) {
-            if (separator.length === 1 || input.slice(idx, idx + separator.length) === separator) {
-                parts.push(input.slice(lastPos, idx));
-                lastPos = idx + separator.length;
-            }
-        }
-        if (char === "(" || char === "[" || char === "{") {
-            stack.push(char);
-        } else if (char === ")" && stack[stack.length - 1] === "(" || char === "]" && stack[stack.length - 1] === "[" || char === "}" && stack[stack.length - 1] === "{") {
-            stack.pop();
-        }
+ */
+export function splitAtTopLevelOnly(input, separator) {
+  let stack = []
+  let parts = []
+  let lastPos = 0
+
+  for (let idx = 0; idx < input.length; idx++) {
+    let char = input[idx]
+
+    if (stack.length === 0 && char === separator[0]) {
+      if (separator.length === 1 || input.slice(idx, idx + separator.length) === separator) {
+        parts.push(input.slice(lastPos, idx))
+        lastPos = idx + separator.length
+      }
     }
-    parts.push(input.slice(lastPos));
-    return parts;
+
+    if (char === '(' || char === '[' || char === '{') {
+      stack.push(char)
+    } else if (
+      (char === ')' && stack[stack.length - 1] === '(') ||
+      (char === ']' && stack[stack.length - 1] === '[') ||
+      (char === '}' && stack[stack.length - 1] === '{')
+    ) {
+      stack.pop()
+    }
+  }
+
+  parts.push(input.slice(lastPos))
+
+  return parts
 }
